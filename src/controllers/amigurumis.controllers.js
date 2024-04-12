@@ -1,30 +1,39 @@
 import { pool } from "../db.js";
+import sharp from 'sharp';
 
 export const createamigurumis = async (req, res) => {
     try {
         const { name, price, image } = req.body;
         if (!name || !price || !image) {
             return res.status(400).json({
-                massage: "Todos los campos son obligatorios!"
+                message: "Todos los campos son obligatorios!"
             });
         }
+
+        // Redimensionar y comprimir la imagen
+        const resizedImageBuffer = await sharp(image.buffer) // image.buffer es el buffer de la imagen
+            .resize({ width: 200 }) // Redimensiona la imagen al ancho máximo de 200 píxeles
+            .toBuffer(); // Convierte la imagen a un buffer
+
+        // Guardar la imagen en la base de datos
         const [row] = await pool.query("INSERT INTO amigurumis (name , price,image) VALUES (?, ?, ?)",
-            [name, price, image]);
+            [name, price, resizedImageBuffer]);
+
         res.json({
             id: row.insertId,
             name,
-            image,
-            price
+            price,
+            image: resizedImageBuffer, // Aquí podrías guardar la imagen como un buffer en la base de datos
         });
     } catch (error) {
-        console.log("che salio re mal la creacion del amigurumi", error);
+        console.log("Error al crear el amigurumi:", error);
         res.status(500).json({
-            massage: "Error interno del servidor al crear el amigurumi",
-            error: error.massage
+            message: "Error interno del servidor al crear el amigurumi",
+            error: error.message
         });
     }
-
 };
+
 export const getamigurumis = async (req, res) => {
     try {
         const [rows] = await pool.query("SELECT * FROM amigurumis");
