@@ -1,6 +1,6 @@
 import { pool } from "../db.js";
 
-export const createAmigurumi = async (req, res) => {
+export const createamigurumis = async (req, res) => {
     try {
         const { name, price, image } = req.body;
         if (!name || !price || !image) {
