@@ -10,8 +10,11 @@ export const createamigurumis = async (req, res) => {
             });
         }
 
+        // Obtener el buffer de la imagen
+        const imageBuffer = Buffer.from(image, 'base64');
+
         // Redimensionar y comprimir la imagen
-        const resizedImageBuffer = await sharp(image.buffer) // image.buffer es el buffer de la imagen
+        const resizedImageBuffer = await sharp(imageBuffer) // Utiliza el buffer de la imagen
             .resize({ width: 200 }) // Redimensiona la imagen al ancho máximo de 200 píxeles
             .toBuffer(); // Convierte la imagen a un buffer
 
