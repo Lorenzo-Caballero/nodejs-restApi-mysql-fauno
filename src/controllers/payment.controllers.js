@@ -1,36 +1,40 @@
-import { MercadoPagoConfig, Payment } from 'mercadopago';
+import { config } from "dotenv"
+import { Router } from "express";
+import mercadopago from "mercadopago";
+config()
+const Mercado_Pago = Router();
 
-// Paso 1: Importar las partes del módulo que deseas usar
+mercadopago.configure({
+    access_token: process.env.ACCESS - TOKEN - MercadoPagoConfig
+});
 
-// Paso 2: Inicializar el objeto cliente
-const client = new MercadoPagoConfig({ accessToken: 'TEST-3402990332387076-041311-8de358bdae2f9e17bbdc80508b7a0a42-254442316', options: { timeout: 5000, idempotencyKey: 'abc' } });
 
-// Paso 3: Inicializar el objeto de API
-const payment = new Payment(client);
+Mercado_Pago.post("/", async (req, res) => {
+    try {
+        const preference = {
+            items: [
+                {
+                    title: "Muñeco",
+                    unit_price: 200,
+                    currency_id: "ARS",
+                    description: "muñequito amigurumi",
+                    quantity: 1,
+                },
+            ],
+            back_urls: {
+                success: "",
+                failure: ""
+            },
 
-export const createOrder = async (req, res) => {
-  try {
-    // Paso 4: Crear el objeto de solicitud
-    const body = {
-      transaction_amount: 4000, // Monto de la transacción
-      description: 'Diseño Tattoo', // Descripción del artículo
-      payment_method_id: 'visa', // ID del método de pago (por ejemplo, 'visa', 'mastercard', etc.)
-      payer: {
-        email: 'email@example.com' // Correo electrónico del comprador
-      },
-    };
+            auto_return: "approved",
+        };
 
-    // Paso 5: Crear el objeto de opciones de solicitud - Opcional
-    const requestOptions = {
-      idempotencyKey: 'abc', // Clave de idempotencia
-    };
+        const respuesta = await mercadopago.preferences.create(preference);
+        console.log(respuesta);
+        res.status(200).json(respuesta);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json(error.message)
+    }
+});
 
-    // Paso 6: Realizar la solicitud
-    const result = await payment.create({ body, requestOptions });
-
-    res.send(result);
-  } catch (error) {
-    console.error("Error al crear el pedido:", error);
-    res.status(500).json({ error: "Hubo un error al procesar la solicitud." });
-  }
-};
