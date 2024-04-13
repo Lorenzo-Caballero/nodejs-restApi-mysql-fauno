@@ -10,8 +10,8 @@ export const createOrder = async (req, res) => {
         items: [
             {
                 title: "Diseño Tattoo",
-                unit_price: "4000",
-                currency_id: "PEN",
+                unit_price: 4000,
+                currency_id: "ARS",
                 quantity: 1,
             }
         ]
