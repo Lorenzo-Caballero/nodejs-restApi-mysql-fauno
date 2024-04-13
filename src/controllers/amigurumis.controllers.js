@@ -1,50 +1,30 @@
 import { pool } from "../db.js";
-import multer from 'multer';
-import sharp from 'sharp';
-
-// Función para redimensionar y optimizar la imagen
-const helperImg = (filePath, fileName, size = 300) => {
-    return sharp(filePath)
-        .resize(size)
-        .toFile(`./optimize/${fileName}`);
-};
 
 export const createamigurumis = async (req, res) => {
     try {
-        const { name, price } = req.body;
-        const imageFile = req.file;
-
-        if (!name || !price || !imageFile) {
+        const { name, price, image } = req.body;
+        if (!name || !price || !image) {
             return res.status(400).json({
-                message: "Todos los campos son obligatorios!"
+                massage: "Todos los campos son obligatorios!"
             });
         }
-
-        // Redimensionar y optimizar la imagen antes de guardarla
-        await helperImg(imageFile.path, `resize-${imageFile.filename}`, 100);
-
-        // Obtener el nombre de la imagen redimensionada
-        const resizedFileName = `resize-${imageFile.filename}`;
-
-        // Insertar el registro en la base de datos
-        const [row] = await pool.query("INSERT INTO amigurumis (name, price, image) VALUES (?, ?, ?)",
-            [name, price, resizedFileName]);
-
+        const [row] = await pool.query("INSERT INTO amigurumis (name , price,image) VALUES (?, ?, ?)",
+            [name, price, image]);
         res.json({
             id: row.insertId,
             name,
-            price,
-            image: resizedFileName
+            image,
+            price
         });
     } catch (error) {
-        console.error("Error al crear el amigurumi:", error);
+        console.log("che salio re mal la creacion del amigurumi", error);
         res.status(500).json({
-            message: "Error interno del servidor al crear el amigurumi",
-            error: error.message
+            massage: "Error interno del servidor al crear el amigurumi",
+            error: error.massage
         });
     }
-};
 
+};
 export const getamigurumis = async (req, res) => {
     try {
         const [rows] = await pool.query("SELECT * FROM amigurumis");
