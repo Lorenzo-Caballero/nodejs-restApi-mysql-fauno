@@ -1,10 +1,10 @@
-import { MercadoPagoConfig, Payment } from 'mercadopago';
+import { Payment } from 'mercadopago';
 
-// Inicializar el objeto cliente
-const client = new MercadoPagoConfig({ accessToken: 'TEST-3230960472138078-032423-ab23df1b92b9867ed719267ec3327511-1742793404', options: { timeout: 5000, idempotencyKey: 'abc' } });
-
-// Inicializar el objeto de API
-const payment = new Payment(client);
+// Inicializar el objeto de API y configurar el cliente al mismo tiempo
+const payment = new Payment({
+  accessToken: 'TEST-3230960472138078-032423-ab23df1b92b9867ed719267ec3327511-1742793404',
+  options: { timeout: 5000, idempotencyKey: 'abc' }
+});
 
 export const createOrder = async (req, res) => {
   try {
