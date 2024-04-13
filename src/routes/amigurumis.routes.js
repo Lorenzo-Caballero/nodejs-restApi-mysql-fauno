@@ -1,16 +1,27 @@
 import { Router } from "express";
+import multer from 'multer';
 import { getamigurumis, createamigurumis, updateamigurumis, deleteamigurumis, getamigurumisById } from "../controllers/amigurumis.controllers.js";
-const router = Router()
 
-router.get("/amigurumis", getamigurumis)
+const router = Router();
 
-router.get("/amigurumis/:id", getamigurumisById)
+// Configuración de Multer
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "./uploads");
+    },
+    filename: (req, file, cb) => {
+        const ext = file.originalname.split(".").pop();
+        cb(null, `${Date.now()}.${ext}`);
+    }
+});
 
-router.post("/amigurumis", createamigurumis)
+const upload = multer({ storage });
 
-router.put("/amigurumis/:id", updateamigurumis)
-
-router.delete("/amigurumis/:id", deleteamigurumis)
-
+// Rutas
+router.get("/amigurumis", getamigurumis);
+router.get("/amigurumis/:id", getamigurumisById);
+router.post("/amigurumis", upload.single("image"), createamigurumis);
+router.put("/amigurumis/:id", updateamigurumis);
+router.delete("/amigurumis/:id", deleteamigurumis);
 
 export default router;

@@ -9,19 +9,6 @@ const helperImg = (filePath, fileName, size = 300) => {
         .toFile(`./optimize/${fileName}`);
 };
 
-// Configuración de Multer
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, "./uploads");
-    },
-    filename: (req, file, cb) => {
-        const ext = file.originalname.split(".").pop();
-        cb(null, `${Date.now()}.${ext}`);
-    }
-});
-
-const upload = multer({ storage });
-
 export const createamigurumis = async (req, res) => {
     try {
         const { name, price } = req.body;
