@@ -1,14 +1,16 @@
-import { Payment } from 'mercadopago';
+import { MercadoPagoConfig, Payment } from 'mercadopago';
 
-// Inicializar el objeto de API y configurar el cliente al mismo tiempo
-const payment = new Payment({
-  accessToken: 'TEST-3230960472138078-032423-ab23df1b92b9867ed719267ec3327511-1742793404',
-  options: { timeout: 5000, idempotencyKey: 'abc' }
-});
+// Paso 1: Importar las partes del módulo que deseas usar
+
+// Paso 2: Inicializar el objeto cliente
+const client = new MercadoPagoConfig({ accessToken: 'TEST-3402990332387076-041311-8de358bdae2f9e17bbdc80508b7a0a42-254442316', options: { timeout: 5000, idempotencyKey: 'abc' } });
+
+// Paso 3: Inicializar el objeto de API
+const payment = new Payment(client);
 
 export const createOrder = async (req, res) => {
   try {
-    // Crear el objeto de solicitud
+    // Paso 4: Crear el objeto de solicitud
     const body = {
       transaction_amount: 4000, // Monto de la transacción
       description: 'Diseño Tattoo', // Descripción del artículo
@@ -18,12 +20,12 @@ export const createOrder = async (req, res) => {
       },
     };
 
-    // Crear el objeto de opciones de solicitud - Opcional
+    // Paso 5: Crear el objeto de opciones de solicitud - Opcional
     const requestOptions = {
       idempotencyKey: 'abc', // Clave de idempotencia
     };
 
-    // Realizar la solicitud
+    // Paso 6: Realizar la solicitud
     const result = await payment.create({ body, requestOptions });
 
     res.send(result);
