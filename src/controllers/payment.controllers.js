@@ -1,40 +1,20 @@
-import { config } from "dotenv"
-import { Router } from "express";
-import mercadopago from "mercadopago";
-config()
-const Mercado_Pago = Router();
+import {mercadopago} from "mercadopago";
 
-mercadopago.configure({
-    access_token: process.env.ACCESS - TOKEN - MercadoPagoConfig
-});
+export const createOrder = async (req, res) => {
+    mercadopago.configure({
+        access_token:
+            "TEST-3230960472138078-032423-ab23df1b92b9867ed719267ec3327511-1742793404",
+    });
 
-
-Mercado_Pago.post("/", async (req, res) => {
-    try {
-        const preference = {
-            items: [
-                {
-                    title: "Muñeco",
-                    unit_price: 200,
-                    currency_id: "ARS",
-                    description: "muñequito amigurumi",
-                    quantity: 1,
-                },
-            ],
-            back_urls: {
-                success: "",
-                failure: ""
-            },
-
-            auto_return: "approved",
-        };
-
-        const respuesta = await mercadopago.preferences.create(preference);
-        console.log(respuesta);
-        res.status(200).json(respuesta);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json(error.message)
-    }
-});
-
+    const result = await mercadopago.preferences.create({
+        items: [
+            {
+                title: "Diseño Tattoo",
+                unit_price: 4000,
+                currency_id: "ARS",
+                quantity: 1,
+            }
+        ]
+    })
+    res.send(result)
+};
