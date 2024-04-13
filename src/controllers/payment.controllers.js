@@ -16,7 +16,7 @@ export const createOrder = async (req, res) => {
       description: 'Diseño Tattoo', // Descripción del artículo
       payment_method_id: 'visa', // ID del método de pago (por ejemplo, 'visa', 'mastercard', etc.)
       payer: {
-        email: 'email@example.com' // Correo electrónico del comprador
+        email: 'TESTUSER46340066' // Correo electrónico del comprador
       },
     };
 
