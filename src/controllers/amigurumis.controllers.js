@@ -1,43 +1,62 @@
 import { pool } from "../db.js";
+import multer from 'multer';
 import sharp from 'sharp';
+
+// Función para redimensionar y optimizar la imagen
+const helperImg = (filePath, fileName, size = 300) => {
+    return sharp(filePath)
+        .resize(size)
+        .toFile(`./optimize/${fileName}`);
+};
+
+// Configuración de Multer
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "./uploads");
+    },
+    filename: (req, file, cb) => {
+        const ext = file.originalname.split(".").pop();
+        cb(null, `${Date.now()}.${ext}`);
+    }
+});
+
+const upload = multer({ storage });
 
 export const createamigurumis = async (req, res) => {
     try {
-        const { name, price, image } = req.body;
-        if (!name || !price || !image) {
+        const { name, price } = req.body;
+        const imageFile = req.file;
+
+        if (!name || !price || !imageFile) {
             return res.status(400).json({
                 message: "Todos los campos son obligatorios!"
             });
         }
 
-        // Obtener el buffer de la imagen
-        const imageBuffer = Buffer.from(image, 'base64');
+        // Redimensionar y optimizar la imagen antes de guardarla
+        await helperImg(imageFile.path, `resize-${imageFile.filename}`, 100);
 
-        // Redimensionar y comprimir la imagen
-        const resizedImageBuffer = await sharp(imageBuffer) // Utiliza el buffer de la imagen
-            .resize({ width: 200 }) // Redimensiona la imagen al ancho máximo de 200 píxeles
-            .toFormat('jpeg') // Especifica el formato de la imagen
-            .toBuffer(); // Convierte la imagen a un buffer
+        // Obtener el nombre de la imagen redimensionada
+        const resizedFileName = `resize-${imageFile.filename}`;
 
-        // Guardar la imagen en la base de datos
-        const [row] = await pool.query("INSERT INTO amigurumis (name , price,image) VALUES (?, ?, ?)",
-            [name, price, resizedImageBuffer]);
+        // Insertar el registro en la base de datos
+        const [row] = await pool.query("INSERT INTO amigurumis (name, price, image) VALUES (?, ?, ?)",
+            [name, price, resizedFileName]);
 
         res.json({
             id: row.insertId,
             name,
             price,
-            image: resizedImageBuffer, // Aquí podrías guardar la imagen como un buffer en la base de datos
+            image: resizedFileName
         });
     } catch (error) {
-        console.log("Error al crear el amigurumi:", error);
+        console.error("Error al crear el amigurumi:", error);
         res.status(500).json({
             message: "Error interno del servidor al crear el amigurumi",
             error: error.message
         });
     }
 };
-
 
 export const getamigurumis = async (req, res) => {
     try {
