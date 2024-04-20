@@ -1,10 +1,10 @@
 import MercadoPago from 'mercadopago';
 import { pool } from "../db.js";
-import {MERCADOPAGO} from "../config.js"
+import { MERCADOPAGO } from "../config.js";
 
 // Configurar las credenciales de MercadoPago
 MercadoPago.configure({
-  access_token: MERCADOPAGO
+    access_token: MERCADOPAGO
 });
 
 // Ruta para procesar el pago
