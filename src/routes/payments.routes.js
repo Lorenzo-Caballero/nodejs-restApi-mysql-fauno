@@ -4,7 +4,7 @@ import {
   updatePaymentStatus,
   getTransactionById,
   getAllTransactions
-} from './paymentsControllers.js';
+} from '../controllers/payments.controllers.js';
 
 const router = express.Router();
 
