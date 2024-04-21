@@ -123,6 +123,7 @@ export const loginUser = async (req, res) => {
         res.json({
             message: "Login exitoso",
             email:user.email,
+            userId:eser.id,
             name:user.name,
             role:user.role,
             coins:user.coins,
