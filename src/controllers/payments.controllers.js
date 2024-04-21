@@ -32,7 +32,7 @@ export const processPayment = async (req, res) => {
     const transactionId = response.body.id;
 
     // Insertar la información de la transacción en la tabla de transacciones
-    const insertQuery = "INSERT INTO transactions (transaction_id, user_id) VALUES (?, ?)";
+    const insertQuery = "INSERT INTO transactions (transactions_id, user_id) VALUES (?, ?)";
     await pool.query(insertQuery, [transactionId, userId]);
 
     res.json({ redirectUrl: response.body.init_point });
