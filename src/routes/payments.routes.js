@@ -9,7 +9,7 @@ import {
 const router = express.Router();
 
 // Ruta para procesar el pago
-router.post('/users/:userId/transactions/process', processPayment);
+router.post('/users/transactions/process', processPayment);
 
 // Ruta para actualizar el estado del pago después de que se complete
 /*router.put('/transactions/updateStatus', updatePaymentStatus);
