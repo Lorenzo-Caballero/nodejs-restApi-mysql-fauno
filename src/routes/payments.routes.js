@@ -1,9 +1,9 @@
 import express from 'express';
 import {
   processPayment,
-  updatePaymentStatus,
-  getTransactionById,
-  getAllTransactions
+ // updatePaymentStatus,
+  //getTransactionById,
+  //getAllTransactions
 } from '../controllers/payments.controllers.js';
 
 const router = express.Router();
@@ -12,12 +12,12 @@ const router = express.Router();
 router.post('/users/:userId/transactions/process', processPayment);
 
 // Ruta para actualizar el estado del pago después de que se complete
-router.post('/transactions/updateStatus', updatePaymentStatus);
+/*router.put('/transactions/updateStatus', updatePaymentStatus);
 
 // Ruta para obtener información sobre una transacción específica por su ID
 router.get('/transactions/:id', getTransactionById);
 
 // Ruta para obtener todas las transacciones
-router.get('/transactions', getAllTransactions);
+router.get('/transactions', getAllTransactions);*/
 
 export default router;
