@@ -10,7 +10,7 @@ MercadoPago.configure({
 // Ruta para procesar el pago
 export const processPayment = async (req, res) => {
   try {
-    const userId = req.params.userId; // Obtener el ID del usuario de req.params
+    //const userId = req.params.userId; // Obtener el ID del usuario de req.params
     const { items, payer } = req.body;
 
     // Crear la preferencia de pago en MercadoPago
@@ -20,20 +20,20 @@ export const processPayment = async (req, res) => {
         quantity: item.quantity,
         currency_id: 'ARS', // Moneda (Argentina)
         unit_price: item.price
-      })),
+      }))/*,
       payer: {
         email: payer.email // Email del comprador
-      }
+      }*/
     };
 
     const response = await MercadoPago.preferences.create(preference);
 
     // Guardar la información de la transacción en la base de datos
-    const transactionId = response.body.id;
+    //const transactionId = response.body.id;
 
     // Insertar la información de la transacción en la tabla de transacciones
-    const insertQuery = "INSERT INTO transactions (transactions_id, user_id) VALUES (?, ?)";
-    await pool.query(insertQuery, [transactionId, userId]);
+    //const insertQuery = "INSERT INTO transactions (transactions_id, user_id) VALUES (?, ?)";
+   // await pool.query(insertQuery, [transactionId, userId]);
 
     res.json({ redirectUrl: response.body.init_point });
   } catch (error) {
@@ -61,6 +61,7 @@ export const updatePaymentStatus = async (req, res) => {
     });
   }
 };
+/*
 
 // Ruta para obtener información sobre una transacción específica por su ID
 export const getTransactionById = async (req, res) => {
@@ -104,3 +105,4 @@ export const getAllTransactions = async (req, res) => {
     });
   }
 };
+*/
