@@ -4,7 +4,7 @@ import { MERCADOPAGO } from "../config.js";
 
 // Configurar las credenciales de MercadoPago
 MercadoPago.configure({
-    access_token: MERCADOPAGO
+  access_token: MERCADOPAGO
 });
 
 // Ruta para procesar el pago
@@ -33,7 +33,7 @@ export const processPayment = async (req, res) => {
 
     // Insertar la información de la transacción en la tabla de transacciones
     //const insertQuery = "INSERT INTO transactions (transactions_id, user_id) VALUES (?, ?)";
-   // await pool.query(insertQuery, [transactionId, userId]);
+    // await pool.query(insertQuery, [transactionId, userId]);
 
     res.json({ redirectUrl: response.body.init_point });
   } catch (error) {
